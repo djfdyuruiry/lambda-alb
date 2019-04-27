@@ -3,7 +3,7 @@ import { existsSync, readFileSync, PathLike } from "fs"
 import AWS from "aws-sdk"
 import { InvocationRequest } from "aws-sdk/clients/lambda"
 import { raw as rawBodyParser } from "body-parser"
-import commandLineArgs, { OptionDefinition } from "command-line-args"
+import commandLineArgs from "command-line-args"
 import cors from "cors"
 import express, { Request, Response, Application } from "express"
 import { Server } from "http"
@@ -25,12 +25,37 @@ import { Options } from "./model/Options";
 export class AlbApp {
     private static readonly MAX_REQUEST_BODY_SIZE = "1024kb"
     private static readonly HTTP_METHODS_WITH_ENTITY = ["POST", "PUT", "PATCH"]
-    private static readonly APP_OPTIONS: OptionDefinition[] = [
-        { name: "port", alias: "p", type: Number, defaultValue: 8080 },
-        { name: "host", alias: "h", type: String, defaultValue: "*" },
-        { name: "corsOrigin", alias: "o", type: String, defaultValue: "*" },
-        { name: "debug", alias: "d", type: Boolean, defaultValue: false },
-        { name: "config", alias: "c", type: String }
+
+    public static readonly APP_OPTIONS: any[] = [{
+            alias: "c",
+            description: "Path to the JSON configuraiton file",
+            name: "config",
+            type: String
+        }, {
+            alias: "h",
+            defaultValue: "*",
+            description: "Host to listen on (defaults to all)",
+            name: "host",
+            type: String
+        }, {
+            alias: "p",
+            defaultValue: 8080,
+            description: "Port to listen on (defaults to 8080)",
+            name: "port",
+            type: Number
+        }, {
+            alias: "o",
+            defaultValue: "*",
+            description: "CORS origin to accept (default is to accept any origin)",
+            name: "corsOrigin",
+            type: String
+        }, {
+            alias: "d",
+            defaultValue: false,
+            description: "Enable debug logging",
+            name: "debug",
+            type: Boolean
+        }
     ]
 
     protected readonly expressApp: Application
@@ -95,14 +120,23 @@ export class AlbApp {
         }) as Options
 
         if (!options.config || options.config.trim() === "") {
-            throw new Error("--config or -c option must be specified")
+            this.errorAndExit("--config or -c option must be specified")
         }
 
         if (!existsSync(options.config)) {
-            throw new Error(`Config file '${options.config}' not found`)
+            this.errorAndExit(`Config file '${options.config}' not found`)
         }
 
         return options
+    }
+
+    private errorAndExit(message: string) {
+        this.printAndExit(message, "ERROR: ")
+    }
+
+    private printAndExit(message: string, prefix: string = "") {
+        console.error(`${prefix}${message}`)
+        process.exit(1)
     }
 
     private readConfig(configPath: PathLike): AlbConfig {

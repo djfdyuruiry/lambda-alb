@@ -7,15 +7,15 @@
     "url": "https://github.com/djfdyuruiry/lambda-alb.git"
   },
   "scripts": {
-    "build": "yarn run lint && rm -rf dist && tsc && yarn docs",
-    "build-all": "yarn run install-with-audit && yarn run build && yarn run build-tests",
+    "build": "yarn lint && rm -rf dist && tsc && chmod +x dist/bin/lambda-alb.js && yarn docs",
+    "build-all": "yarn install-with-audit && yarn build && yarn build-tests",
     "build-tests": "rm -rf ./tests/js && tsc -p ./tests",
     "docs": "rm -rf ./docs && typedoc --mode file --excludePrivate --out ./docs",
     "clean-install": "rm -rf node_modules && yarn install-with-audit",
     "install-with-audit": "yarn install",
     "lint": "tslint 'src/**/*.ts'",
     "shell": "bash",
-    "test": "yarn run build-all && scripts/runTests.sh",
+    "test": "yarn build-all && scripts/runTests.sh",
     "test-app": "yarn build-all && node ./dist/bin/lambda-alb.js"
   },
   "main": "dist/lambda-alb.js",
@@ -43,8 +43,10 @@
     ]
   },
   "dependencies": {
+    "@types/command-line-usage": "^5.0.1",
     "aws-sdk": "^2.404.0",
     "command-line-args": "^5.0.2",
+    "command-line-usage": "^5.0.5",
     "cors": "^2.8.5",
     "express": "^4.16.4"
   },
