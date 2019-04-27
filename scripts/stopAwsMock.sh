@@ -5,7 +5,12 @@ stopLocalstack() {
 
     # clear down lambda containers still hanging around
     printf "Removing lambda containers: "
-    docker kill $(docker ps -a -q --filter ancestor="lambci/lambda:nodejs8.10" --format="{{.ID}}")
+
+    containers=$(docker ps -a -q --filter ancestor="lambci/lambda:nodejs8.10" --format="{{.ID}}")
+
+    if [ -n "${containers}" ]; then
+        docker kill ${containers}
+    fi
 
     pipenv run docker-compose down
 

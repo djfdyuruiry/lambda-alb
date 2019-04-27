@@ -12,6 +12,7 @@ import { IHttpClientResponse } from "typed-rest-client/Interfaces";
 @TestFixture()
 export class AlbAppAcceptanceTests {
     private static readonly BASE_URL = "http://localhost:8080"
+    private static readonly TEST_CFG_PATH = joinPath(__dirname, "../test-config.json")
     private static readonly TEST_FILE_PATH = joinPath(__dirname, "../test.pdf")
     private static readonly TEST_FILE_SIZE = 19605
     private static readonly TEST_FILE_MD5 = "bb0cf6ccd0fe8e18e0a14e8028709abe"
@@ -31,19 +32,6 @@ export class AlbAppAcceptanceTests {
             { allowRedirects: false }
         )
         this.httpClient = this.restClient.client
-
-        this.appConfig = {
-            region: "eu-west-1",
-            lambdaEndpoint: "http://localhost:4574",
-            targets: {
-                "test":{
-                    lambdaName: "lambda-api",
-                },
-                "broken":{
-                    lambdaName: "i-dont-exist",
-                }
-            }
-        }
         this.appArgs = []
 
         await this.buildApp()
@@ -219,11 +207,7 @@ export class AlbAppAcceptanceTests {
         this.app = new AlbApp()
 
         if (includeConfig) {
-            let configTempFile = openTempFileSync()
-
-            writeFileSync(configTempFile.path, JSON.stringify(this.appConfig))
-
-            this.appArgs.push("--config", configTempFile.path)
+            this.appArgs.push("--config", AlbAppAcceptanceTests.TEST_CFG_PATH)
         }
 
         this.appArgs.push("--debug")

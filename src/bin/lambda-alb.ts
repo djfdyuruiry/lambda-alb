@@ -8,9 +8,7 @@ const APP_USAGE: OptionList = {
     optionList: AlbApp.APP_OPTIONS
 }
 
-function validateArgs() {
-    let args = process.argv.splice(2)
-
+function validateArgs(args: string[]) {
     if (
         args.length === 0 ||
         args.includes("--help") ||
@@ -23,13 +21,16 @@ function validateArgs() {
 
 async function main() {
     let app = new AlbApp()
+    let args = process.argv.splice(2)
 
-    validateArgs()
+    console.dir(args)
 
-    process.on("SIGINT", app.stopServer)
-    console.log("Press ctrl-c at any time to exit...");
+    validateArgs(args)
 
-    await app.runServer(process.argv)
+    process.on("SIGINT", async () => await app.stopServer())
+    console.log("Press CTRL-C at any time to exit...")
+
+    await app.runServer(args)
 }
 
 (async () => {

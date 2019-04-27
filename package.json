@@ -16,7 +16,7 @@
     "lint": "tslint 'src/**/*.ts'",
     "shell": "bash",
     "test": "yarn build-all && scripts/runTests.sh",
-    "test-app": "yarn build-all && node ./dist/bin/lambda-alb.js"
+    "test-app": "yarn build-all && ./scripts/testApp.sh"
   },
   "main": "dist/lambda-alb.js",
   "typings": "dist/lambda-alb.d.ts",

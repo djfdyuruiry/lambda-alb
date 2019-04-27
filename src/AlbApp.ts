@@ -28,7 +28,7 @@ export class AlbApp {
 
     public static readonly APP_OPTIONS: any[] = [{
             alias: "c",
-            description: "Path to the JSON configuraiton file",
+            description: "Path to the JSON configuration file",
             name: "config",
             type: String
         }, {

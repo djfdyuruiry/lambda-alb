@@ -1,0 +1,12 @@
+{
+    "region": "eu-west-1",
+    "lambdaEndpoint": "http://localhost:4574",
+    "targets": {
+        "test":{
+            "lambdaName": "lambda-api"
+        },
+        "broken":{
+            "lambdaName": "i-dont-exist"
+        }
+    }
+}
