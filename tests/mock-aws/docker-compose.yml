@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  aws:
+    image: localstack/localstack
+    ports:
+      - "4567-4593:4567-4593"
+    environment:
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_DOCKER_NETWORK=mock-aws_default
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"

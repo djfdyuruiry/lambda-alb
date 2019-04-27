@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Tests",
+            "preLaunchTask": "buildAndStartAwsMock",
+            "postDebugTask": "stopAwsMock",
+            "program": "${workspaceFolder}/node_modules/.bin/alsatian",
+            "cwd": "${workspaceFolder}",
+            "outputCapture": "std",
+            "console": "integratedTerminal",
+            "args": [
+                "-t",
+                "60000",
+                "-T",
+                "./tests/js/**/*Tests.js"
+            ],
+            // the below settings are required, otherwise debugging is flaky
+            "protocol": "inspector",
+            "sourceMaps": true,
+            "outFiles": [
+                "dist/**/*.js",
+                "tests/js/**/*.js"
+            ]
+        }
+    ]
+}
