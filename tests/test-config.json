@@ -1,6 +1,6 @@
 {
-    "region": "eu-west-1",
     "lambdaEndpoint": "http://localhost:4574",
+    "region": "eu-west-1",
     "targets": {
         "test":{
             "lambdaName": "lambda-api"

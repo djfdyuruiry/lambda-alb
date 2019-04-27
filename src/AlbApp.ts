@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, PathLike } from "fs"
 
 import AWS from "aws-sdk"
-import { InvocationRequest } from "aws-sdk/clients/lambda"
+import { ClientConfiguration, InvocationRequest } from "aws-sdk/clients/lambda"
 import { raw as rawBodyParser } from "body-parser"
 import commandLineArgs from "command-line-args"
 import cors from "cors"
@@ -12,7 +12,7 @@ import { AlbConfig } from "./model/AlbConfig"
 import { AlbRequest } from "./model/AlbRequest"
 import { AlbResponse } from "./model/AlbResponse"
 import { AlbTarget } from "./model/AlbTarget"
-import { Options } from "./model/Options";
+import { Options } from "./model/Options"
 
 /**
  * Simple console application that hosts an express HTTP
@@ -120,23 +120,14 @@ export class AlbApp {
         }) as Options
 
         if (!options.config || options.config.trim() === "") {
-            this.errorAndExit("--config or -c option must be specified")
+            throw new Error("--config or -c option must be specified")
         }
 
         if (!existsSync(options.config)) {
-            this.errorAndExit(`Config file '${options.config}' not found`)
+            throw new Error(`Config file '${options.config}' not found`)
         }
 
         return options
-    }
-
-    private errorAndExit(message: string) {
-        this.printAndExit(message, "ERROR: ")
-    }
-
-    private printAndExit(message: string, prefix: string = "") {
-        console.error(`${prefix}${message}`)
-        process.exit(1)
     }
 
     private readConfig(configPath: PathLike): AlbConfig {
@@ -165,13 +156,19 @@ export class AlbApp {
     }
 
     private configureAws() {
-        AWS.config.update({
-            region: this.config.region
-        })
+        let config: ClientConfiguration = {}
 
-        this.lambdaClient = new AWS.Lambda({
-            endpoint: this.config.lambdaEndpoint
-        })
+        if (this.config.region && this.config.region.trim() !== "") {
+            config.region = this.config.region
+        }
+
+        AWS.config.update(config)
+
+        if (this.config.lambdaEndpoint && this.config.lambdaEndpoint.trim() !== "") {
+            config.endpoint = this.config.lambdaEndpoint
+        }
+
+        this.lambdaClient = new AWS.Lambda(config)
     }
 
     private setupAlbTargetListeners() {

@@ -1,8 +1,8 @@
 # lambda-alb
 
-Extension module for the `ts-lambda-api` package which enables running lambda REST API's locally using express.
+A mock ALB using express that enables invoking a lambda locally using HTTP.
 
-This module also provides Swagger UI support, powered by the `swagger-ui-express` npm package.
+It supports multple lambda's mapped to various routes. Can be configured to use either a mock AWS setup, such as [localstack](https://localstack.cloud/), or an actual AWS region.
 
 [NPM Package](https://www.npmjs.com/package/lambda-alb)
 [GitHub Repo](https://github.com/djfdyuruiry/lambda-alb/)
@@ -15,34 +15,63 @@ Read the full `typedoc` documentation: https://djfdyuruiry.github.io/lambda-alb/
 
 ---
 
-**Note: These steps modify an existing `ts-lambda-api` app. If you don't have one, see the package documentation.**
-
-- Install this package and types for Node.js as dev dependencies:
+- Install this package using npm
 
 ```shell
-npm install -D lambda-alb
-npm install -D @types/node
+npm install -g lambda-alb
 ```
 
-- Create a new typescript file, add the following:
+- Deploy some code to an AWS Lambda Function that processes ALB or API Gateway request events (see [here](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html))
 
-```typescript
-import * as path from "path"
+- Create a new JSON file `config.json`, add the following:
 
-import { ApiConsoleApp } from "lambda-alb"
-
-// if you use a different directory, point to it here instead of 'controllers'
-let app = new ApiConsoleApp(path.join(__dirname, "controllers"))
-
-app.runServer(process.argv)
+```json
+{
+    "region": "eu-west-1",
+    "targets": {
+        "some-lambda":{
+            "lambdaName": "some-lambda-function"
+        },
+        "another-lambda":{
+            "lambdaName": "another-lambda-function"
+        }
+    }
+}
 ```
 
-- Compile your application and run the new JS file using Node.js
+*Ensure the region of your function is correct when copying the above*
 
-- You can now call your API locally:
+- Start the ALB mock using your new config file:
+
+```shell
+lambda-alb --config config.json
+```
+
+- Start making requests using the target routes:
 
 ```
-wget -qO - http://localhost:8080/api/v1/some-controller/
+curl http://localhost:8080/some-lambda/
+curl http://localhost:8080/another-lambda/
+```
+
+----
+
+# Local AWS Mocks
+
+----
+
+If you are using a local AWS Mock to run your lambda's, specify it's endpoint in the JSON configuration file:
+
+```json
+{
+    "lambdaEndpoint": "http://localhost:4574",
+    "region": "eu-west-1",
+    "targets": {
+        "some-lambda":{
+            "lambdaName": "some-lambda-function"
+        }
+    }
+}
 ```
 
 ----
@@ -51,11 +80,13 @@ wget -qO - http://localhost:8080/api/v1/some-controller/
 
 ----
 
-`ApiConsoleApp` supports several optional command line parameters.
+`lambda-alb` supports several command line parameters:
 
-- `-p` or `--port`: Port to listen on, defaults to `8080`
-- `-h` or `--host`: Host to accept requests on, defaults to `*` (any hostname/ip)
-- `-c` or `--cors-origin`: CORS origins to allow, defaults to `*` (any origin)
+- `-c` or `--config`:        Path to JSON configuration file
+- `-p` or `--port`:          (Optional) Port to listen on, defaults to `8080`
+- `-h` or `--host`:          (Optional) Host to accept requests on, defaults to `*` (any hostname/ip)
+- `-o` or `--cors-origin`:   (Optional) CORS origins to allow, defaults to `*` (any origin)
+- `-d` or `--debug`:         (Optional) Enable debug logging
 
 ----
 
@@ -63,39 +94,18 @@ wget -qO - http://localhost:8080/api/v1/some-controller/
 
 ----
 
-Both the `configureApp` and `configureApi` methods documented in `ts-lambda-api` are available in the `ApiConsoleApp` class.
+Below is an overview of the JSON configuration file schema:
 
-----
+| Key            | Description                                               | Example                                                        | Required? |
+|----------------|-----------------------------------------------------------|----------------------------------------------------------------|-----------|
+| region         | AWS region that your Lambda targets have been deployed to | `eu-west-1`                                                    | ✘         |
+| lambdaEndpoint | Custom service endpoint for AWS Lambda                    | `http://localhost:4574`                                        | ✘         |
+| targets        | Map of target route to AWS Lambda definition              | ` { "some-lambda": { "lambdaName": "some-lambda-function "} }` | ✔         |
 
-# Swagger UI
+AWS Lambda Definition (`targets`) schema:
 
-----
-
-To enable the Swagger UI page, simply enable open-api in your application config. The interface will then be available from the `/swagger` endpoint. For example, if you configured your app like below:
-
-```typescript
-import * as path from "path"
-
-import { AppConfig } from "ts-lambda-api"
-import { ApiConsoleApp } from "lambda-alb"
-
-let appConfig = new AppConfig()
-
-appConfig.base = "/api/v1"
-appConfig.version = "v1"
-appConfig.openApi.enabled = true
-
-let app = new ApiConsoleApp(path.join(__dirname, "controllers"))
-
-app.runServer(process.argv)
-```
-
-Then, the Swagger UI interface will be available @ http://localhost:8080/api/v1/swagger
-
-----
-
-# Packaging for Release
-
-----
-
-When you are packing up your lambda API for release to AWS, ensure that you have installed this package as a development dependency only, otherwise it will significantly slow down and bloat your lambda.
+| Key            | Description                                  | Example         | Required? |
+|----------------|----------------------------------------------|-----------------|-----------|
+| lambdaName     | Name of the target Lambda function           | `a-lambda-name` |     ✔     |
+| versionOrAlias | A version or alias of the function to invoke | `DEV`           |     ✘     |
+| routeUrl       | Override the target route for this Lambda    | `/special-route`|     ✘     |
