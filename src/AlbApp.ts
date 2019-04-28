@@ -18,8 +18,8 @@ import { Options } from "./model/Options"
  * Simple console application that hosts an express HTTP
  * server that simulates an AWS ALB.
  *
- * A request is mapped from the HTTP request to the appropriate lambda
- * target, the response response from invoking the lambda is mapped to
+ * A request is mapped from the HTTP request to a lambda
+ * target, the response from invoking the lambda is mapped to
  * a standard HTTP response and returned to the express client.
  */
 export class AlbApp {
@@ -73,7 +73,8 @@ export class AlbApp {
     /**
      * Starts the express server.
      *
-     * @param args Command line arguments for this server, see --help for more info.
+     * @param args Command line arguments for this server, equivalent to `process.argv.splice(2)`.
+     *             See --help for more info.
      */
     public async runServer(args: string[]) {
         let options = this.parseArguments(args)
@@ -143,7 +144,7 @@ export class AlbApp {
             origin: options.corsOrigin
         }))
 
-        // setup body parser to Base64 encode request's
+        // setup body parser to capture request bodies
         this.expressApp.use(rawBodyParser({
             limit: AlbApp.MAX_REQUEST_BODY_SIZE,
             type: r => true
@@ -182,7 +183,11 @@ export class AlbApp {
             let target: AlbTarget = this.config.targets[targetKey]
             let basePath = target.routeUrl ? target.routeUrl : `/${targetKey}`
 
-            this.log("ALB target configured for lambda '%s' @ path: %s", target.lambdaName, basePath)
+            if (basePath === "/") {
+                throw new Error(`Invalid route URL '/' for lambda target '${targetKey}'`)
+            }
+
+            this.log("ALB target configured for lambda '%s' @ route: %s", target.lambdaName, basePath)
 
             this.expressApp.all(
                 `${basePath}*`,
@@ -218,9 +223,7 @@ export class AlbApp {
     }
 
     private async mapRequestToApiEvent(request: Request, basePath: string): Promise<AlbRequest> {
-        if (this.debugEnabled) {
-            this.log("Mapping express request to AWS model")
-        }
+        this.log("Mapping express request to AWS model")
 
         let apiRequest = new AlbRequest()
 
@@ -259,9 +262,13 @@ export class AlbApp {
             Qualifier: target.versionOrAlias
         }
 
-        if (this.debugEnabled) {
-            this.log("Sending request to AWS Lambda:")
+        this.log(
+            "Invoking AWS Lambda '%s'%s",
+            target.lambdaName,
+            target.versionOrAlias ? `, using qualifier '${target.versionOrAlias}'` : ""
+        )
 
+        if (this.debugEnabled) {
             let loggableRequest = JSON.parse(JSON.stringify(request)) as AlbRequest
 
             if (loggableRequest.isBase64Encoded) {
@@ -286,9 +293,9 @@ export class AlbApp {
     }
 
     private forwardApiResponse(apiResponse: AlbResponse, response: Response) {
-        if (this.debugEnabled) {
-            this.log("Mapping AWS response model to express response")
+        this.log("Mapping AWS response model to express response")
 
+        if (this.debugEnabled) {
             let loggableResponse = JSON.parse(JSON.stringify(apiResponse)) as AlbResponse
 
             if (loggableResponse.isBase64Encoded) {

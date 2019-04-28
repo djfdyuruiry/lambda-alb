@@ -72,8 +72,8 @@
 						<p>Simple console application that hosts an express HTTP
 						server that simulates an AWS ALB.</p>
 					</div>
-					<p>A request is mapped from the HTTP request to the appropriate lambda
-						target, the response response from invoking the lambda is mapped to
+					<p>A request is mapped from the HTTP request to a lambda
+						target, the response from invoking the lambda is mapped to
 					a standard HTTP response and returned to the express client.</p>
 				</div>
 			</section>
@@ -167,7 +167,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/djfdyuruiry/lambda-alb/blob/master/src/AlbApp.ts#L78">AlbApp.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/djfdyuruiry/lambda-alb/blob/master/src/AlbApp.ts#L79">AlbApp.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -180,7 +180,8 @@
 								<li>
 									<h5>args: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Command line arguments for this server, see --help for more info.</p>
+										<p>Command line arguments for this server, equivalent to <code>process.argv.splice(2)</code>.
+										See --help for more info.</p>
 									</div>
 								</li>
 							</ul>
@@ -198,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/djfdyuruiry/lambda-alb/blob/master/src/AlbApp.ts#L342">AlbApp.ts:342</a></li>
+									<li>Defined in <a href="https://github.com/djfdyuruiry/lambda-alb/blob/master/src/AlbApp.ts#L349">AlbApp.ts:349</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>

@@ -23,16 +23,12 @@ async function main() {
     let app = new AlbApp()
     let args = process.argv.splice(2)
 
-    console.dir(args)
-
     validateArgs(args)
+
+    await app.runServer(args)
 
     process.on("SIGINT", async () => await app.stopServer())
     console.log("Press CTRL-C at any time to exit...")
-
-    await app.runServer(args)
 }
 
-(async () => {
-    await main()
-})()
+(async () => await main())()
