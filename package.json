@@ -1,7 +1,7 @@
 {
   "name": "lambda-alb",
   "description": "Mock ALB for invoking AWS Lambda's over HTTP using express.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/djfdyuruiry/lambda-alb.git"

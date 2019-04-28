@@ -263,9 +263,10 @@ export class AlbApp {
         }
 
         this.log(
-            "Invoking AWS Lambda '%s'%s",
+            "Invoking AWS Lambda '%s'%s. Path: %s",
             target.lambdaName,
-            target.versionOrAlias ? `, using qualifier '${target.versionOrAlias}'` : ""
+            target.versionOrAlias ? `, using qualifier '${target.versionOrAlias}'` : "",
+            request.path
         )
 
         if (this.debugEnabled) {
