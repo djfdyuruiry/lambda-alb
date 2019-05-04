@@ -29,7 +29,7 @@ printReportSummary() {
 }
 
 generateTestReport() {
-    junit2html "${junitFile}" "${reportFile}"
+    pipenv run junit2html "${junitFile}" "${reportFile}"
 }
 
 determineExitCode() {
@@ -72,7 +72,7 @@ main() {
 
     cleanupOldResults
 
-    #pipenv install
+    pipenv install
 
     ./scripts/startAwsMock.sh
 
