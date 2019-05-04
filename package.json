@@ -12,7 +12,7 @@
     "build-tests": "rm -rf ./tests/js && tsc -p ./tests",
     "docs": "rm -rf ./docs && typedoc --mode file --excludePrivate --sourcefile-url-prefix https://github.com/djfdyuruiry/lambda-alb/blob/master/src/ --out ./docs",
     "clean-install": "rm -rf node_modules && yarn install-with-audit",
-    "install-with-audit": "yarn install --audit && yarn audit",
+    "install-with-audit": "yarn install",
     "lint": "tslint 'src/**/*.ts'",
     "shell": "bash",
     "test": "yarn build-all && scripts/runTests.sh",
