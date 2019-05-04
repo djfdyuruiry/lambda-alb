@@ -1,4 +1,14 @@
 language: node_js
+
+python:
+  - "2.7"
+
+services:
+  - docker
+
 before_install:
+  # install yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
+  # install pipenv
+  - sudo pip install pipenv

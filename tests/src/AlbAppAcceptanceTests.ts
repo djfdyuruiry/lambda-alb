@@ -143,18 +143,18 @@ export class AlbAppAcceptanceTests {
 
     @AsyncTest()
     @Timeout(60000)
-    public async when_invalid_target_request_received_then_500_server_error_response_is_returned() {
+    public async when_invalid_target_request_received_then_400_bad_request_response_is_returned() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/shop/api/v1/hello-world`)
 
-        Expect(response.message.statusCode).toEqual(500)
+        Expect(response.message.statusCode).toEqual(400)
     }
 
     @AsyncTest()
     @Timeout(60000)
-    public async when_valid_target_request_received_and_lambda_does_not_exit_then_500_server_error_response_is_returned_from_lambda() {
+    public async when_valid_target_request_received_and_lambda_does_not_exit_then_503_service_unavailable_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/broken/api/v1/hello-wat`)
 
-        Expect(response.message.statusCode).toEqual(500)
+        Expect(response.message.statusCode).toEqual(503)
     }
 
     @AsyncTest()
