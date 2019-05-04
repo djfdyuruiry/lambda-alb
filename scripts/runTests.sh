@@ -72,8 +72,6 @@ main() {
 
     cleanupOldResults
 
-    pipenv install
-
     ./scripts/startAwsMock.sh
 
     runTests
