@@ -11,6 +11,7 @@ import { IHttpClientResponse } from "typed-rest-client/Interfaces";
 
 @TestFixture()
 export class AlbAppAcceptanceTests {
+    private static readonly TIMEOUT = 120000
     private static readonly BASE_URL = "http://localhost:8080"
     private static readonly TEST_CFG_PATH = joinPath(__dirname, "../test-config.json")
     private static readonly TEST_FILE_PATH = joinPath(__dirname, "../test.pdf")
@@ -49,7 +50,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_then_200_OK_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/test/api/v1/hello-world`)
 
@@ -57,7 +58,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_then_request_parameters_are_passed_to_lambda() {
         let name = "sandy"
         let region = "central europe"
@@ -77,7 +78,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_post_request_received_then_body_is_passed_to_lambda() {
         let body = "I am the body of the POST request, so I am"
         let response = await this.httpClient.post(
@@ -90,7 +91,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_post_request_with_binary_content_received_then_body_is_passed_to_lambda() {
         let response: IHttpClientResponse
         let testFileStream = createReadStream(AlbAppAcceptanceTests.TEST_FILE_PATH)
@@ -134,7 +135,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_and_path_is_not_found_by_lambda_then_404_not_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/test/api/v1/hello-wat`)
 
@@ -142,7 +143,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_invalid_target_request_received_then_400_bad_request_response_is_returned() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/shop/api/v1/hello-world`)
 
@@ -150,7 +151,7 @@ export class AlbAppAcceptanceTests {
     }
 
     @AsyncTest()
-    @Timeout(60000)
+    @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_and_lambda_does_not_exit_then_503_service_unavailable_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/broken/api/v1/hello-wat`)
 
