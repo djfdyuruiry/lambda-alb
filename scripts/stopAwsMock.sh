@@ -12,7 +12,7 @@ stopLocalstack() {
         docker kill ${containers}
     fi
 
-    pipenv run docker-compose down
+    docker-compose down
 
     popd
 }

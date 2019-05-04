@@ -3,7 +3,7 @@
 waitForLocalstackToBeReady() {
     printf "Waiting for localstack to come online => "
 
-    until $(pipenv run awslocal lambda list-functions --cli-read-timeout 2 --cli-connect-timeout 1 > /dev/null 2>&1); do
+    until $(awslocal lambda list-functions --cli-read-timeout 2 --cli-connect-timeout 1 > /dev/null 2>&1); do
         printf "."
         sleep 5
     done
@@ -15,10 +15,10 @@ waitForLocalstackToBeReady() {
 startLocalstack() {
     pushd tests/mock-aws
 
-    pipenv run docker-compose up -d
+    docker-compose up -d
     waitForLocalstackToBeReady
 
-    pipenv run awslocal lambda create-function \
+    awslocal lambda create-function \
         --function-name "lambda-api" \
         --runtime nodejs8.10 \
         --role "not-a-real-role" \
@@ -29,7 +29,7 @@ startLocalstack() {
 }
 
 main() {
-    pipenv install
+    #pipenv install
 
     startLocalstack
 }
