@@ -41,6 +41,8 @@ npm install -g lambda-alb
 
 *Ensure the region of your function is correct when copying the above*
 
+- Ensure that your AWS credentials are set up correctly, see [here](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) if you need help doing this
+
 - Start the ALB mock using your new config file:
 
 ```shell
@@ -73,6 +75,36 @@ If you are using a local AWS Mock to run your lambda's, specify it's endpoint in
     }
 }
 ```
+
+If you get errors similar to `Missing credentials in config`, run the below to set mock credential env vars before starting `lambda-alb`:
+
+```bash
+export AWS_ACCESS_KEY_ID=MOCK
+export AWS_SECRET_ACCESS_KEY=MOCK
+```
+
+----
+
+# Docker
+
+----
+
+A `Dockerfile` is provided in this repository that will create an image containing the latest version of this package on the global path.
+
+To use the image:
+
+- Place a `config.json` file in the current directory containing your setup
+
+- Run the below commands:
+
+    ```bash
+    docker build --tag lambda-alb .
+    dokcer run --rm -v $(pwd):/etc/lambda-alb -p 8080:8080 lambda-alb
+    ```
+
+    *Don't forget to pass your AWS credentials in as environment variables, or mount a volume to supply a credentials file. See [here](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more info.*
+
+- You can now access your `lambda-alb` on http://localhost:8080
 
 ----
 
