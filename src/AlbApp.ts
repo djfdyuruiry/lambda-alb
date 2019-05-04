@@ -92,14 +92,16 @@ export class AlbApp {
 
         // health check endpoint for testing
         this.expressApp.get("/", (_, res) => res.status(204).send())
-        this.expressApp.get("*", (req, res) => {
+        this.expressApp.all("*", (req, res) => {
             let errMessage = `Request does not match any configured ALB target group: ${req.path}`
 
             if (this.debugEnabled) {
                 this.log(errMessage)
             }
 
-            res.status(500).send("Request does not match any configured ALB target group")
+            res.status(400).send({
+                error: "Request does not match any configured ALB target group"
+            })
         })
 
         await this.startServer(options.host, options.port, listenOnAllHosts)
@@ -214,11 +216,10 @@ export class AlbApp {
                 console.dir(ex)
             }
 
-            response.status(500)
-                .header("content-type", "text/plain")
-                .send(
-                    `Target lambda '${target.lambdaName}' invocation error:\n${JSON.stringify(ex)}`
-                )
+            response.status(503)
+                .send({
+                    error: `Target lambda '${target.lambdaName}' invocation error:\n${JSON.stringify(ex)}`
+                })
         }
     }
 
