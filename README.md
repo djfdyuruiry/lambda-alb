@@ -4,8 +4,9 @@ A mock ALB using express that enables invoking a lambda locally using HTTP.
 
 It supports multple lambda's mapped to various routes. Can be configured to use either a mock AWS setup, such as [localstack](https://localstack.cloud/), or an actual AWS region.
 
-[NPM Package](https://www.npmjs.com/package/lambda-alb)
-[GitHub Repo](https://github.com/djfdyuruiry/lambda-alb/)
+GitHub Repo: https://github.com/djfdyuruiry/lambda-alb
+
+[![NPM](https://nodei.co/npm/lambda-alb.png)](https://nodei.co/npm/lambda-alb/)
 
 Read the full `typedoc` documentation: https://djfdyuruiry.github.io/lambda-alb/
 
@@ -67,7 +68,6 @@ If you are using a local AWS Mock to run your lambda's, specify it's endpoint in
 ```json
 {
     "lambdaEndpoint": "http://localhost:4574",
-    "region": "eu-west-1",
     "targets": {
         "some-lambda":{
             "lambdaName": "some-lambda-function"
@@ -105,6 +105,22 @@ To use the image:
     *Don't forget to pass your AWS credentials in as environment variables, or mount a volume to supply a credentials file. See [here](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more info.*
 
 - You can now access your `lambda-alb` on http://localhost:8080
+
+### docker-compose
+
+If you are using `docker-compose` it's very simple to add `lambda-alb` to your stack:
+
+```yaml
+version: "3"
+
+services:
+  alb:
+    build: github.com/djfdyuruiry/lambda-alb.git
+    ports:
+      - 8080:8080
+    volumes:
+      - ${PWD}/config.json:/etc/lambda-alb/config.json
+```
 
 ----
 
