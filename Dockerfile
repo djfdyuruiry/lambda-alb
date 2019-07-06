@@ -1,4 +1,4 @@
-FROM "node:12-alpine"
+FROM "node:12.6.0-alpine"
 
 RUN npm install -g lambda-alb
 RUN mkdir /etc/lambda-alb

@@ -67,8 +67,8 @@
 				<h1 id="lambda-alb">lambda-alb</h1>
 				<p>A mock ALB using express that enables invoking a lambda locally using HTTP.</p>
 				<p>It supports multple lambda&#39;s mapped to various routes. Can be configured to use either a mock AWS setup, such as <a href="https://localstack.cloud/">localstack</a>, or an actual AWS region.</p>
-				<p><a href="https://www.npmjs.com/package/lambda-alb">NPM Package</a>
-				<a href="https://github.com/djfdyuruiry/lambda-alb/">GitHub Repo</a></p>
+				<p>GitHub Repo: <a href="https://github.com/djfdyuruiry/lambda-alb">https://github.com/djfdyuruiry/lambda-alb</a></p>
+				<p><a href="https://nodei.co/npm/lambda-alb/"><img src="https://nodei.co/npm/lambda-alb.png" alt="NPM"></a></p>
 				<p>Read the full <code>typedoc</code> documentation: <a href="https://djfdyuruiry.github.io/lambda-alb/">https://djfdyuruiry.github.io/lambda-alb/</a></p>
 				<hr>
 				<h2 id="getting-started">Getting Started</h2>
@@ -96,7 +96,10 @@
 }</code></pre>
 				<p><em>Ensure the region of your function is correct when copying the above</em></p>
 				<ul>
-					<li>Start the ALB mock using your new config file:</li>
+					<li><p>Ensure that your AWS credentials are set up correctly, see <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html">here</a> if you need help doing this</p>
+					</li>
+					<li><p>Start the ALB mock using your new config file:</p>
+					</li>
 				</ul>
 				<pre><code class="language-shell">lambda-alb --config config.json</code></pre>
 				<ul>
@@ -109,13 +112,42 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 				<p>If you are using a local AWS Mock to run your lambda&#39;s, specify it&#39;s endpoint in the JSON configuration file:</p>
 				<pre><code class="language-json">{
     <span class="hljs-attr">"lambdaEndpoint"</span>: <span class="hljs-string">"http://localhost:4574"</span>,
-    <span class="hljs-attr">"region"</span>: <span class="hljs-string">"eu-west-1"</span>,
     <span class="hljs-attr">"targets"</span>: {
         <span class="hljs-attr">"some-lambda"</span>:{
             <span class="hljs-attr">"lambdaName"</span>: <span class="hljs-string">"some-lambda-function"</span>
         }
     }
 }</code></pre>
+				<p>If you get errors similar to <code>Missing credentials in config</code>, run the below to set mock credential env vars before starting <code>lambda-alb</code>:</p>
+				<pre><code class="language-bash"><span class="hljs-built_in">export</span> AWS_ACCESS_KEY_ID=MOCK
+<span class="hljs-built_in">export</span> AWS_SECRET_ACCESS_KEY=MOCK</code></pre>
+				<hr>
+				<h1 id="docker">Docker</h1>
+				<hr>
+				<p>A <code>Dockerfile</code> is provided in this repository that will create an image containing the latest version of this package on the global path.</p>
+				<p>To use the image:</p>
+				<ul>
+					<li><p>Place a <code>config.json</code> file in the current directory containing your setup</p>
+					</li>
+					<li><p>Run the below commands:</p>
+						<pre><code class="language-bash">  docker build --tag lambda-alb .
+  dokcer run --rm -v $(<span class="hljs-built_in">pwd</span>):/etc/lambda-alb -p 8080:8080 lambda-alb</code></pre>
+						<p>  <em>Don&#39;t forget to pass your AWS credentials in as environment variables, or mount a volume to supply a credentials file. See <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html">here</a> for more info.</em></p>
+					</li>
+					<li><p>You can now access your <code>lambda-alb</code> on <a href="http://localhost:8080">http://localhost:8080</a></p>
+					</li>
+				</ul>
+				<h3 id="docker-compose">docker-compose</h3>
+				<p>If you are using <code>docker-compose</code> it&#39;s very simple to add <code>lambda-alb</code> to your stack:</p>
+				<pre><code class="language-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">"3"</span>
+
+<span class="hljs-attr">services:</span>
+<span class="hljs-attr">  alb:</span>
+<span class="hljs-attr">    build:</span> <span class="hljs-string">github.com/djfdyuruiry/lambda-alb.git</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">8080</span><span class="hljs-string">:8080</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">${PWD}/config.json:/etc/lambda-alb/config.json</span></code></pre>
 				<hr>
 				<h1 id="command-line-arguments">Command Line Arguments</h1>
 				<hr>
