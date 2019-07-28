@@ -1,10 +1,14 @@
 # lambda-alb
 
+[![Docker Hub](https://img.shields.io/docker/pulls/djfdyuruiry/lambda-alb)](https://hub.docker.com/r/djfdyuruiry/lambda-alb)
+
 A mock ALB using express that enables invoking a lambda locally using HTTP.
 
 It supports multple lambda's mapped to various routes. Can be configured to use either a mock AWS setup, such as [localstack](https://localstack.cloud/), or an actual AWS region.
 
 GitHub Repo: https://github.com/djfdyuruiry/lambda-alb
+
+Docker Hub: https://hub.docker.com/r/djfdyuruiry/lambda-alb
 
 [![NPM](https://nodei.co/npm/lambda-alb.png)](https://nodei.co/npm/lambda-alb/)
 
@@ -89,8 +93,6 @@ export AWS_SECRET_ACCESS_KEY=MOCK
 
 ----
 
-A `Dockerfile` is provided in this repository that will create an image containing the latest version of this package on the global path.
-
 To use the image:
 
 - Place a `config.json` file in the current directory containing your setup
@@ -98,8 +100,7 @@ To use the image:
 - Run the below commands:
 
     ```bash
-    docker build --tag lambda-alb .
-    dokcer run --rm -v $(pwd):/etc/lambda-alb -p 8080:8080 lambda-alb
+    dokcer run --rm -v $(pwd):/etc/lambda-alb -p 8080:8080 djfdyuruiry/lambda-alb
     ```
 
     *Don't forget to pass your AWS credentials in as environment variables, or mount a volume to supply a credentials file. See [here](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more info.*
@@ -115,11 +116,19 @@ version: "3"
 
 services:
   alb:
-    build: github.com/djfdyuruiry/lambda-alb.git
+    image: djfdyuruiry/lambda-alb.git
     ports:
       - 8080:8080
     volumes:
       - ${PWD}/config.json:/etc/lambda-alb/config.json
+```
+
+### Building
+
+A `Dockerfile` is provided in this repository that will create an image containing the latest version of this package on the global path.
+
+```bash
+docker build --tag djfdyuruiry/lambda-alb .
 ```
 
 ----

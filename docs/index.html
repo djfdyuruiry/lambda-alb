@@ -64,14 +64,18 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="lambda-alb">lambda-alb</h1>
+				<a href="#lambda-alb" id="lambda-alb" style="color: inherit; text-decoration: none;">
+					<h1>lambda-alb</h1>
+				</a>
 				<p>A mock ALB using express that enables invoking a lambda locally using HTTP.</p>
 				<p>It supports multple lambda&#39;s mapped to various routes. Can be configured to use either a mock AWS setup, such as <a href="https://localstack.cloud/">localstack</a>, or an actual AWS region.</p>
 				<p>GitHub Repo: <a href="https://github.com/djfdyuruiry/lambda-alb">https://github.com/djfdyuruiry/lambda-alb</a></p>
 				<p><a href="https://nodei.co/npm/lambda-alb/"><img src="https://nodei.co/npm/lambda-alb.png" alt="NPM"></a></p>
 				<p>Read the full <code>typedoc</code> documentation: <a href="https://djfdyuruiry.github.io/lambda-alb/">https://djfdyuruiry.github.io/lambda-alb/</a></p>
 				<hr>
-				<h2 id="getting-started">Getting Started</h2>
+				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+					<h2>Getting Started</h2>
+				</a>
 				<hr>
 				<ul>
 					<li>Install this package using npm</li>
@@ -107,7 +111,9 @@
 				</ul>
 				<pre><code>curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number">8080</span><span class="hljs-regexp">/some-lambda/</span>
 curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number">8080</span><span class="hljs-regexp">/another-lambda/</span></code></pre><hr>
-				<h1 id="local-aws-mocks">Local AWS Mocks</h1>
+				<a href="#local-aws-mocks" id="local-aws-mocks" style="color: inherit; text-decoration: none;">
+					<h1>Local AWS Mocks</h1>
+				</a>
 				<hr>
 				<p>If you are using a local AWS Mock to run your lambda&#39;s, specify it&#39;s endpoint in the JSON configuration file:</p>
 				<pre><code class="language-json">{
@@ -122,7 +128,9 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 				<pre><code class="language-bash"><span class="hljs-built_in">export</span> AWS_ACCESS_KEY_ID=MOCK
 <span class="hljs-built_in">export</span> AWS_SECRET_ACCESS_KEY=MOCK</code></pre>
 				<hr>
-				<h1 id="docker">Docker</h1>
+				<a href="#docker" id="docker" style="color: inherit; text-decoration: none;">
+					<h1>Docker</h1>
+				</a>
 				<hr>
 				<p>A <code>Dockerfile</code> is provided in this repository that will create an image containing the latest version of this package on the global path.</p>
 				<p>To use the image:</p>
@@ -137,7 +145,9 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 					<li><p>You can now access your <code>lambda-alb</code> on <a href="http://localhost:8080">http://localhost:8080</a></p>
 					</li>
 				</ul>
-				<h3 id="docker-compose">docker-compose</h3>
+				<a href="#docker-compose" id="docker-compose" style="color: inherit; text-decoration: none;">
+					<h3>docker-compose</h3>
+				</a>
 				<p>If you are using <code>docker-compose</code> it&#39;s very simple to add <code>lambda-alb</code> to your stack:</p>
 				<pre><code class="language-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">"3"</span>
 
@@ -149,7 +159,9 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 <span class="hljs-attr">    volumes:</span>
 <span class="hljs-bullet">      -</span> <span class="hljs-string">${PWD}/config.json:/etc/lambda-alb/config.json</span></code></pre>
 				<hr>
-				<h1 id="command-line-arguments">Command Line Arguments</h1>
+				<a href="#command-line-arguments" id="command-line-arguments" style="color: inherit; text-decoration: none;">
+					<h1>Command Line Arguments</h1>
+				</a>
 				<hr>
 				<p><code>lambda-alb</code> supports several command line parameters:</p>
 				<ul>
@@ -160,7 +172,9 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 					<li><code>-d</code> or <code>--debug</code>:         (Optional) Enable debug logging</li>
 				</ul>
 				<hr>
-				<h1 id="configuration">Configuration</h1>
+				<a href="#configuration" id="configuration" style="color: inherit; text-decoration: none;">
+					<h1>Configuration</h1>
+				</a>
 				<hr>
 				<p>Below is an overview of the JSON configuration file schema:</p>
 				<table>
@@ -276,6 +290,7 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -324,7 +339,7 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>

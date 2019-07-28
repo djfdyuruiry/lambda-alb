@@ -1,7 +1,7 @@
 {
   "name": "lambda-alb",
   "description": "Mock ALB for invoking AWS Lambda's over HTTP using express.",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/djfdyuruiry/lambda-alb.git"
@@ -9,14 +9,15 @@
   "scripts": {
     "build": "yarn lint && rm -rf dist && tsc && chmod +x dist/bin/lambda-alb.js && yarn docs",
     "build-all": "yarn install-with-audit && yarn build && yarn build-tests",
-    "build-tests": "rm -rf ./tests/js && tsc -p ./tests",
-    "docs": "rm -rf ./docs && typedoc --mode file --excludePrivate --sourcefile-url-prefix https://github.com/djfdyuruiry/lambda-alb/blob/master/src/ --out ./docs",
+    "build-tests": "rm -rf tests/js && tsc -p tests",
     "clean-install": "rm -rf node_modules && yarn install-with-audit",
-    "install-with-audit": "yarn install",
+    "docs": "rm -rf docs && typedoc --mode file --excludePrivate --sourcefile-url-prefix https://github.com/djfdyuruiry/lambda-alb/blob/master/src/ --out docs",
+    "install-with-audit": "yarn install && yarn audit",
     "lint": "tslint 'src/**/*.ts'",
+    "publishAll": "yarn test && yarn publish && scripts/buildAndPublishDocker.sh",
     "shell": "bash",
     "test": "yarn build-all && scripts/runTests.sh",
-    "test-app": "yarn build-all && ./scripts/testApp.sh"
+    "test-app": "yarn build-all && scripts/testApp.sh"
   },
   "main": "dist/lambda-alb.js",
   "typings": "dist/lambda-alb.d.ts",
@@ -43,7 +44,7 @@
     ]
   },
   "dependencies": {
-    "aws-sdk": "^2.493.0",
+    "aws-sdk": "^2.501.0",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^6.0.2",
     "cors": "^2.8.5",
@@ -55,18 +56,17 @@
     "@types/cors": "^2.8.5",
     "@types/express": "^4.17.0",
     "@types/md5-file": "^4.0.0",
-    "@types/node": "^12.6.2",
+    "@types/node": "^12.6.8",
     "@types/temp": "^0.8.34",
     "alsatian": "^2.3.0",
-    "junit-bark": "^1.1.1",
-    "marked": "^0.7.0",
+    "junit-bark": "^1.1.2",
     "md5-file": "^4.0.0",
     "nyc": "^13.3.0",
     "tap-spec": "^5.0.0",
     "temp": "^0.9.0",
     "tslint": "^5.18.0",
     "typed-rest-client": "^1.5.0",
-    "typedoc": "^0.14.2",
+    "typedoc": "^0.15.0",
     "typedoc-plugin-sourcefile-url": "^1.0.4",
     "typescript": "^3.5.3"
   }
