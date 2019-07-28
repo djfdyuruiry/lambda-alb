@@ -67,9 +67,11 @@
 				<a href="#lambda-alb" id="lambda-alb" style="color: inherit; text-decoration: none;">
 					<h1>lambda-alb</h1>
 				</a>
+				<p><a href="https://hub.docker.com/r/djfdyuruiry/lambda-alb"><img src="https://img.shields.io/docker/pulls/djfdyuruiry/lambda-alb" alt="Docker Hub"></a></p>
 				<p>A mock ALB using express that enables invoking a lambda locally using HTTP.</p>
 				<p>It supports multple lambda&#39;s mapped to various routes. Can be configured to use either a mock AWS setup, such as <a href="https://localstack.cloud/">localstack</a>, or an actual AWS region.</p>
 				<p>GitHub Repo: <a href="https://github.com/djfdyuruiry/lambda-alb">https://github.com/djfdyuruiry/lambda-alb</a></p>
+				<p>Docker Hub: <a href="https://hub.docker.com/r/djfdyuruiry/lambda-alb">https://hub.docker.com/r/djfdyuruiry/lambda-alb</a></p>
 				<p><a href="https://nodei.co/npm/lambda-alb/"><img src="https://nodei.co/npm/lambda-alb.png" alt="NPM"></a></p>
 				<p>Read the full <code>typedoc</code> documentation: <a href="https://djfdyuruiry.github.io/lambda-alb/">https://djfdyuruiry.github.io/lambda-alb/</a></p>
 				<hr>
@@ -132,14 +134,12 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 					<h1>Docker</h1>
 				</a>
 				<hr>
-				<p>A <code>Dockerfile</code> is provided in this repository that will create an image containing the latest version of this package on the global path.</p>
 				<p>To use the image:</p>
 				<ul>
 					<li><p>Place a <code>config.json</code> file in the current directory containing your setup</p>
 					</li>
 					<li><p>Run the below commands:</p>
-						<pre><code class="language-bash">  docker build --tag lambda-alb .
-  dokcer run --rm -v $(<span class="hljs-built_in">pwd</span>):/etc/lambda-alb -p 8080:8080 lambda-alb</code></pre>
+						<pre><code class="language-bash">  dokcer run --rm -v $(<span class="hljs-built_in">pwd</span>):/etc/lambda-alb -p 8080:8080 djfdyuruiry/lambda-alb</code></pre>
 						<p>  <em>Don&#39;t forget to pass your AWS credentials in as environment variables, or mount a volume to supply a credentials file. See <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html">here</a> for more info.</em></p>
 					</li>
 					<li><p>You can now access your <code>lambda-alb</code> on <a href="http://localhost:8080">http://localhost:8080</a></p>
@@ -153,11 +153,16 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 
 <span class="hljs-attr">services:</span>
 <span class="hljs-attr">  alb:</span>
-<span class="hljs-attr">    build:</span> <span class="hljs-string">github.com/djfdyuruiry/lambda-alb.git</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">djfdyuruiry/lambda-alb.git</span>
 <span class="hljs-attr">    ports:</span>
 <span class="hljs-bullet">      -</span> <span class="hljs-number">8080</span><span class="hljs-string">:8080</span>
 <span class="hljs-attr">    volumes:</span>
 <span class="hljs-bullet">      -</span> <span class="hljs-string">${PWD}/config.json:/etc/lambda-alb/config.json</span></code></pre>
+				<a href="#building" id="building" style="color: inherit; text-decoration: none;">
+					<h3>Building</h3>
+				</a>
+				<p>A <code>Dockerfile</code> is provided in this repository that will create an image containing the latest version of this package on the global path.</p>
+				<pre><code class="language-bash">docker build --tag djfdyuruiry/lambda-alb .</code></pre>
 				<hr>
 				<a href="#command-line-arguments" id="command-line-arguments" style="color: inherit; text-decoration: none;">
 					<h1>Command Line Arguments</h1>
