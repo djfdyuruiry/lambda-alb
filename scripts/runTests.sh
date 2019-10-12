@@ -44,6 +44,8 @@ determineExitCode() {
 runTestsWithCoverage() {
     # let the framework know it is under test, see: src/util/Environment.ts
     export TLA_UNDER_TEST=1
+    export AWS_ACCESS_KEY_ID="key"
+    export AWS_SECRET_ACCESS_KEY="access-key"
 
     nyc --reporter=lcov --reporter=html alsatian --tap "./tests/js/**/*Tests.js" 2>&1 | \
         tee "${tapFile}" |
