@@ -54,6 +54,7 @@ LICENSE
 *.txt
 
 # below modules are broken by the above rules, so exclude them
-!nyc/node_modules/**/*
+!nyc/**/*
+!istanbul-reports/**/*
 !typedoc-default-themes/**/*
 !xunit-viewer/**/*
