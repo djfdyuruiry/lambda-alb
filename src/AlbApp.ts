@@ -23,7 +23,7 @@ import { Options } from "./model/Options"
  * a standard HTTP response and returned to the express client.
  */
 export class AlbApp {
-    private static readonly MAX_REQUEST_BODY_SIZE = "1024kb"
+    private static readonly MAX_REQUEST_BODY_SIZE = "6144kb"
     private static readonly HTTP_METHODS_WITH_ENTITY = ["POST", "PUT", "PATCH"]
 
     public static readonly APP_OPTIONS: any[] = [{
