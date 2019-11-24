@@ -33,6 +33,7 @@
     "lambda-alb": "dist/bin/lambda-alb.js"
   },
   "nyc": {
+    "all": true,
     "check-coverage": true,
     "per-file": true,
     "lines": 70,
@@ -40,13 +41,27 @@
     "functions": 70,
     "branches": 70,
     "exclude": [
-      "tests/**/*"
-    ]
+      "**/*.d.ts",
+      "**/node_modules/**/*",
+      "docs",
+      "src/bin",
+      "src/model",
+      "tests" 
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "reporter": [
+      "cobertura",
+      "html"
+    ],
+    "report-dir": ".test_results/coverage"
   },
   "dependencies": {
-    "aws-sdk": "^2.548.0",
+    "aws-sdk": "^2.578.0",
     "command-line-args": "^5.0.2",
-    "command-line-usage": "^6.0.2",
+    "command-line-usage": "^6.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1"
   },
@@ -54,20 +69,21 @@
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
     "@types/cors": "^2.8.6",
-    "@types/express": "^4.17.1",
+    "@types/express": "^4.17.2",
     "@types/md5-file": "^4.0.0",
-    "@types/node": "^12.7.12",
+    "@types/node": "^12.12.12",
     "@types/temp": "^0.8.34",
-    "alsatian": "^3.0.1",
-    "junit-bark": "^1.1.2",
+    "alsatian": "^3.1.0",
+    "junit-bark": "^1.2.0",
     "md5-file": "^4.0.0",
-    "nyc": "^13.3.0",
+    "nyc": "^14.1.1",
+    "tap-fail-exit-one": "^1.0.0-beta.1",
     "tap-spec": "^5.0.0",
-    "temp": "^0.9.0",
-    "tslint": "^5.20.0",
+    "temp": "^0.9.1",
+    "tslint": "^5.20.1",
     "typed-rest-client": "^1.5.0",
-    "typedoc": "^0.15.0",
+    "typedoc": "^0.15.3",
     "typedoc-plugin-sourcefile-url": "^1.0.4",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   }
 }

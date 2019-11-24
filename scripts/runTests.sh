@@ -4,7 +4,7 @@ resultsDir=".test_results"
 tapFile="${resultsDir}/results.tap"
 junitFile="${resultsDir}/results.xml"
 reportFile="${resultsDir}/results.html"
-codeCoverageReportFile="coverage/index.html"
+codeCoverageReportFile="${resultsDir}/coverage/index.html"
 
 exitCode=0
 
@@ -47,8 +47,9 @@ runTestsWithCoverage() {
     export AWS_ACCESS_KEY_ID="key"
     export AWS_SECRET_ACCESS_KEY="access-key"
 
-    nyc --reporter=lcov --reporter=html alsatian --tap "./tests/js/**/*Tests.js" 2>&1 | \
+    nyc alsatian --tap "./tests/js/**/*Tests.js" 2>&1 | \
         tee "${tapFile}" |
+        tap-fail-exit-one |
         tap-spec
 
     determineExitCode "$(printf "%s" "${PIPESTATUS[@]}")"

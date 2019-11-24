@@ -152,12 +152,12 @@ curl http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number"
 				<pre><code class="language-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">"3"</span>
 
 <span class="hljs-attr">services:</span>
-<span class="hljs-attr">  alb:</span>
-<span class="hljs-attr">    image:</span> <span class="hljs-string">djfdyuruiry/lambda-alb.git</span>
-<span class="hljs-attr">    ports:</span>
-<span class="hljs-bullet">      -</span> <span class="hljs-number">8080</span><span class="hljs-string">:8080</span>
-<span class="hljs-attr">    volumes:</span>
-<span class="hljs-bullet">      -</span> <span class="hljs-string">${PWD}/config.json:/etc/lambda-alb/config.json</span></code></pre>
+  <span class="hljs-attr">alb:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">djfdyuruiry/lambda-alb.git</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">8080</span><span class="hljs-string">:8080</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">${PWD}/config.json:/etc/lambda-alb/config.json</span></code></pre>
 				<a href="#building" id="building" style="color: inherit; text-decoration: none;">
 					<h3>Building</h3>
 				</a>
