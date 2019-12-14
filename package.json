@@ -1,7 +1,7 @@
 {
   "name": "lambda-alb",
   "description": "Mock ALB for invoking AWS Lambda's over HTTP using express.",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/djfdyuruiry/lambda-alb.git"
@@ -46,7 +46,7 @@
       "docs",
       "src/bin",
       "src/model",
-      "tests" 
+      "tests"
     ],
     "extension": [
       ".ts",
@@ -59,7 +59,7 @@
     "report-dir": ".test_results/coverage"
   },
   "dependencies": {
-    "aws-sdk": "^2.578.0",
+    "aws-sdk": "^2.590.0",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^6.1.0",
     "cors": "^2.8.5",
@@ -71,7 +71,7 @@
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.2",
     "@types/md5-file": "^4.0.0",
-    "@types/node": "^12.12.12",
+    "@types/node": "^12.12.17",
     "@types/temp": "^0.8.34",
     "alsatian": "^3.1.0",
     "junit-bark": "^1.2.0",
@@ -82,8 +82,8 @@
     "temp": "^0.9.1",
     "tslint": "^5.20.1",
     "typed-rest-client": "^1.5.0",
-    "typedoc": "^0.15.3",
+    "typedoc": "^0.15.4",
     "typedoc-plugin-sourcefile-url": "^1.0.4",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.3"
   }
 }

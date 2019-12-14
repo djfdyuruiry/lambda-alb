@@ -1,4 +1,4 @@
-import { AsyncTest, AsyncSetup, AsyncTeardown, Expect, TestCase, TestFixture, Timeout } from "alsatian"
+import { Expect, Setup, Teardown, Test, TestCase, TestFixture, Timeout } from "alsatian"
 import { createWriteStream, createReadStream, statSync as statFileSync, writeFileSync } from "fs"
 import { sync as calculateFileMd5Sync } from "md5-file"
 import { join as joinPath } from "path"
@@ -24,7 +24,7 @@ export class AlbAppAcceptanceTests {
     private restClient: RestClient
     private httpClient: HttpClient
 
-    @AsyncSetup
+    @Setup
     public async setup() {
         this.restClient = new RestClient(
             "alsatian tests",
@@ -38,7 +38,7 @@ export class AlbAppAcceptanceTests {
         await this.buildApp()
     }
 
-    @AsyncTeardown
+    @Teardown
     public async teardown() {
         try {
             await this.app.stopServer()
@@ -49,7 +49,7 @@ export class AlbAppAcceptanceTests {
         this.app = undefined
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_then_200_OK_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/test/api/v1/hello-world`)
@@ -57,7 +57,7 @@ export class AlbAppAcceptanceTests {
         Expect(response.message.statusCode).toEqual(200)
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_then_request_parameters_are_passed_to_lambda() {
         let name = "sandy"
@@ -77,7 +77,7 @@ export class AlbAppAcceptanceTests {
         })
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_post_request_received_then_body_is_passed_to_lambda() {
         let body = "I am the body of the POST request, so I am"
@@ -90,7 +90,7 @@ export class AlbAppAcceptanceTests {
         Expect(await response.readBody()).toEqual(body)
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_post_request_with_binary_content_received_then_body_is_passed_to_lambda() {
         let response: IHttpClientResponse
@@ -134,7 +134,7 @@ export class AlbAppAcceptanceTests {
         )
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_and_path_is_not_found_by_lambda_then_404_not_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/test/api/v1/hello-wat`)
@@ -142,7 +142,7 @@ export class AlbAppAcceptanceTests {
         Expect(response.message.statusCode).toEqual(404)
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_invalid_target_request_received_then_400_bad_request_response_is_returned() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/shop/api/v1/hello-world`)
@@ -150,7 +150,7 @@ export class AlbAppAcceptanceTests {
         Expect(response.message.statusCode).toEqual(400)
     }
 
-    @AsyncTest()
+    @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
     public async when_valid_target_request_received_and_lambda_does_not_exit_then_503_service_unavailable_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/broken/api/v1/hello-wat`)
@@ -158,7 +158,7 @@ export class AlbAppAcceptanceTests {
         Expect(response.message.statusCode).toEqual(503)
     }
 
-    @AsyncTest()
+    @Test()
     public async when_app_args_do_not_contain_config_path_and_runServer_called_then_error_is_thrown() {
         await Expect(async () => {
             this.appArgs = []
@@ -166,7 +166,7 @@ export class AlbAppAcceptanceTests {
         }).toThrowAsync()
     }
 
-    @AsyncTest()
+    @Test()
     public async when_app_argt_contain_config_path_that_does_not_exist_and_runServer_called_then_error_is_thrown() {
         await Expect(async () => {
             this.appArgs = ["-c", "/i/dont/exist.json"]
@@ -176,7 +176,7 @@ export class AlbAppAcceptanceTests {
 
     @TestCase("--port")
     @TestCase("-p")
-    @AsyncTest()
+    @Test()
     public async when_port_set_in_app_args_then_app_listens_on_given_port(portFlag: string) {
         this.appArgs = [portFlag, "3669"]
 
@@ -189,7 +189,7 @@ export class AlbAppAcceptanceTests {
 
     @TestCase("--host")
     @TestCase("-h")
-    @AsyncTest()
+    @Test()
     public async when_host_set_in_app_args_then_app_listens_on_given_host(hostFlag: string) {
         this.appArgs = [hostFlag, "127.0.0.1"]
 
