@@ -46,7 +46,7 @@
       "docs",
       "src/bin",
       "src/model",
-      "tests" 
+      "tests"
     ],
     "extension": [
       ".ts",
