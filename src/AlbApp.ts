@@ -135,9 +135,7 @@ export class AlbApp {
     }
 
     private readConfig(configPath: PathLike): AlbConfig {
-        return JSON.parse(readFileSync(configPath, {
-            encoding: "UTF8"
-        }))
+        return JSON.parse(readFileSync(configPath, "utf8"))
     }
 
     private configureServer(options: Options) {
