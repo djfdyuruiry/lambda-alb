@@ -25,6 +25,7 @@ import { Options } from "./model/Options"
 export class AlbApp {
     private static readonly MAX_REQUEST_BODY_SIZE = "6144kb"
     private static readonly HTTP_METHODS_WITH_ENTITY = ["POST", "PUT", "PATCH"]
+    private static readonly PLAIN_CONTENT_TYPES = ["text/*", "application/json", "application/javascript", "application/xml"]
 
     public static readonly APP_OPTIONS: any[] = [{
             alias: "c",
@@ -246,8 +247,13 @@ export class AlbApp {
 
         let body = request.body as Buffer
 
-        apiRequest.body = body.toString("base64")
-        apiRequest.isBase64Encoded = true
+        if (AlbApp.PLAIN_CONTENT_TYPES.some(contentType => request.is(contentType))) {
+            apiRequest.body = body.toString()
+            apiRequest.isBase64Encoded = false
+        } else {
+            apiRequest.body = body.toString("base64")
+            apiRequest.isBase64Encoded = true
+        }
 
         return apiRequest
     }
