@@ -11,4 +11,4 @@ docker-compose = "==1.26.2"
 junit2html = "==23"
 
 [requires]
-python_version = "3"
+python_version = "3.8"
