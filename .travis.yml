@@ -19,6 +19,6 @@ before_install:
   - sudo apt install -y python3.8
 
   # install pipenv
-  - sudo pip install pipenv
+  - sudo pip3 install pipenv
   - export AWS_ACCESS_KEY_ID=KEY_ID
   - export AWS_SECRET_ACCESS_KEY=KEY
