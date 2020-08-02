@@ -10,6 +10,13 @@ before_install:
   # install yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
+
+  # install python 3.8
+  - sudo apt update
+  - sudo apt install -y software-properties-common
+  - sudo add-apt-repository ppa:deadsnakes/ppa
+  - sudo apt install -y python3.8
+
   # install pipenv
   - sudo pip install pipenv
   - export AWS_ACCESS_KEY_ID=KEY_ID
