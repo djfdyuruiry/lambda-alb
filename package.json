@@ -1,7 +1,7 @@
 {
   "name": "lambda-alb",
   "description": "Mock ALB for invoking AWS Lambda's over HTTP using express.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/djfdyuruiry/lambda-alb.git"
@@ -11,7 +11,7 @@
     "build-all": "yarn install-with-audit && yarn build && yarn build-tests",
     "build-tests": "rm -rf tests/js && tsc -p tests",
     "clean-install": "rm -rf node_modules && yarn install-with-audit",
-    "docs": "rm -rf docs && typedoc --mode file --excludePrivate --includeVersion --gitRevision master --sourcefile-url-prefix https://github.com/djfdyuruiry/lambda-alb/blob/master/src/ --out docs",
+    "docs": "rm -rf docs && typedoc --entryPoints ./src/lambda-alb.ts --excludePrivate --includeVersion --gitRevision master --sourcefile-url-prefix https://github.com/djfdyuruiry/lambda-alb/blob/master/src/ --out docs",
     "install-with-audit": "yarn install && yarn audit",
     "lint": "tslint 'src/**/*.ts'",
     "publishAll": "yarn test && yarn publish && scripts/buildAndPublishDocker.sh",

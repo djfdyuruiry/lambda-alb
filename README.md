@@ -71,7 +71,7 @@ If you are using a local AWS Mock to run your lambda's, specify it's endpoint in
 
 ```json
 {
-    "lambdaEndpoint": "http://localhost:4574",
+    "lambdaEndpoint": "http://localhost:4566",
     "targets": {
         "some-lambda":{
             "lambdaName": "some-lambda-function"
@@ -116,7 +116,7 @@ version: "3"
 
 services:
   alb:
-    image: djfdyuruiry/lambda-alb.git
+    image: djfdyuruiry/lambda-alb
     ports:
       - 8080:8080
     volumes:

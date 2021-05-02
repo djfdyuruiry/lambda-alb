@@ -136,7 +136,7 @@ export class AlbAppAcceptanceTests {
 
     @Test()
     @Timeout(AlbAppAcceptanceTests.TIMEOUT)
-    public async when_valid_target_request_received_and_path_is_not_found_by_lambda_then_404_not_response_is_returned_from_lambda() {
+    public async when_valid_target_request_received_and_path_is_not_found_by_lambda_then_404_not_found_response_is_returned_from_lambda() {
         let response = await this.httpClient.get(`${AlbAppAcceptanceTests.BASE_URL}/test/api/v1/hello-wat`)
 
         Expect(response.message.statusCode).toEqual(404)
