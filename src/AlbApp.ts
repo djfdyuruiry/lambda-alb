@@ -331,7 +331,7 @@ export class AlbApp {
     }
 
     private async startServer(host: string, port: number, listenOnAllHosts: boolean) {
-        await new Promise<Server> ((resolve, reject) => {
+        await new Promise<void> ((resolve, reject) => {
             try {
                 if (listenOnAllHosts) {
                     this.log("Listening on all hosts")

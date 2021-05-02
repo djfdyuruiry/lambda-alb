@@ -6,9 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-awscli-local = "==0.7"
-docker-compose = "==1.26.2"
-junit2html = "==23"
+awscli-local = "==0.14"
+docker-compose = "==1.29.1"
+junit2html = "==30.0.6"
 
 [requires]
-python_version = "3.8"
+python_version = "3"
