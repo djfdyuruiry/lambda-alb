@@ -61,10 +61,10 @@ export class AlbApp {
 
     protected readonly expressApp: Application
 
-    private server?: Server
     private debugEnabled: boolean
-    private config: AlbConfig
-    private lambdaClient: AWS.Lambda
+    private server?: Server
+    private config?: AlbConfig
+    private lambdaClient?: AWS.Lambda
 
     public constructor() {
         this.expressApp = express()
@@ -80,12 +80,12 @@ export class AlbApp {
     public async runServer(args: string[]) {
         let options = this.parseArguments(args)
 
-        this.debugEnabled = options.debug
+        this.debugEnabled = options.debug as boolean
 
         let listenOnAllHosts = options.host === "*"
         let baseUrl = `http://${options.host}:${options.port}`
 
-        this.config = this.readConfig(options.config)
+        this.config = this.readConfig(options.config!)
 
         this.configureAws()
         this.configureServer(options)
@@ -105,7 +105,7 @@ export class AlbApp {
             })
         })
 
-        await this.startServer(options.host, options.port, listenOnAllHosts)
+        await this.startServer(options.host as string, options.port as number, listenOnAllHosts)
 
         this.log(`Listening for HTTP requests on ${baseUrl} ...`)
     }
@@ -148,7 +148,7 @@ export class AlbApp {
         // setup body parser to capture request bodies
         this.expressApp.use(rawBodyParser({
             limit: AlbApp.MAX_REQUEST_BODY_SIZE,
-            type: r => true
+            type: () => true
         }))
 
         this.log(
@@ -160,28 +160,29 @@ export class AlbApp {
     private configureAws() {
         let config: ClientConfiguration = {}
 
-        if (this.config.region && this.config.region.trim() !== "") {
-            config.region = this.config.region
+        if (this.config!.region && this.config!.region.trim() !== "") {
+            config.region = this.config!.region
         }
 
         AWS.config.update(config)
 
-        if (this.config.lambdaEndpoint && this.config.lambdaEndpoint.trim() !== "") {
-            config.endpoint = this.config.lambdaEndpoint
+        if (this.config!.lambdaEndpoint && this.config!.lambdaEndpoint.trim() !== "") {
+            config.endpoint = this.config!.lambdaEndpoint
         }
 
         this.lambdaClient = new AWS.Lambda(config)
     }
 
     private setupAlbTargetListeners() {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         let self = this
 
-        for (let targetKey in this.config.targets) {
-            if (!this.config.targets.hasOwnProperty(targetKey)) {
+        for (let targetKey in this.config!.targets) {
+            if (!this.config!.targets.hasOwnProperty(targetKey)) {
                 continue
             }
 
-            let target: AlbTarget = this.config.targets[targetKey]
+            let target: AlbTarget = this.config!.targets[targetKey]
             let basePath = target.routeUrl ? target.routeUrl : `/${targetKey}`
 
             if (basePath === "/") {
@@ -192,6 +193,7 @@ export class AlbApp {
 
             this.expressApp.all(
                 `${basePath}*`,
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 (req, res) => self.handleHttpRequest(self, target, basePath, req, res)
             )
         }
@@ -205,7 +207,7 @@ export class AlbApp {
         response: Response
     ) {
         try {
-            let apiRequestEvent = await self.mapRequestToApiEvent(request, basePath)
+            let apiRequestEvent = self.mapRequestToApiEvent(request, basePath)
             let apiResponse = await self.run(target, apiRequestEvent, {})
 
             self.forwardApiResponse(apiResponse, response)
@@ -222,7 +224,7 @@ export class AlbApp {
         }
     }
 
-    private async mapRequestToApiEvent(request: Request, basePath: string): Promise<AlbRequest> {
+    private mapRequestToApiEvent(request: Request, basePath: string): AlbRequest {
         this.log("Mapping express request to AWS model")
 
         let apiRequest = new AlbRequest()
@@ -237,7 +239,9 @@ export class AlbApp {
         Object.keys(request.headers)
             .forEach(h => apiRequest.headers[h] = request.headers[h])
         Object.keys(request.query)
-            .forEach(q => apiRequest.queryStringParameters[q] = request.query[q])
+            .forEach(q =>
+                apiRequest.queryStringParameters[q] = (request.query[q] as string[])
+            )
 
         if (!AlbApp.HTTP_METHODS_WITH_ENTITY.includes(request.method)) {
             return apiRequest
@@ -258,9 +262,9 @@ export class AlbApp {
 
     private async run(target: AlbTarget, request: AlbRequest, context: any): Promise<AlbResponse> {
         let contextBuffer = Buffer.from(JSON.stringify(context))
-        let lambaRequest: InvocationRequest = {
+        let lambdaRequest: InvocationRequest = {
             ClientContext: contextBuffer.toString("base64"),
-            FunctionName : target.lambdaName,
+            FunctionName: target.lambdaName!,
             InvocationType : "RequestResponse",
             LogType : "None",
             Payload: JSON.stringify(request),
@@ -277,15 +281,15 @@ export class AlbApp {
         if (this.debugEnabled) {
             let loggableRequest = JSON.parse(JSON.stringify(request)) as AlbRequest
 
-            if (loggableRequest.isBase64Encoded) {
-                loggableRequest.body = `${loggableRequest.body.substr(0, 32)}...`
+            if (loggableRequest.isBase64Encoded!) {
+                loggableRequest.body = `${loggableRequest.body?.substring(0, 32)}...`
             }
 
             console.dir(loggableRequest)
         }
 
         return await (new Promise((resolve, reject) => {
-            this.lambdaClient.invoke(lambaRequest, (error, data) => {
+            this.lambdaClient!.invoke(lambdaRequest, (error, data) => {
                 if (error) {
                     reject(error)
                     return
@@ -305,7 +309,7 @@ export class AlbApp {
             let loggableResponse = JSON.parse(JSON.stringify(apiResponse)) as AlbResponse
 
             if (loggableResponse.isBase64Encoded) {
-                loggableResponse.body = `${loggableResponse.body.substr(0, 32)}...`
+                loggableResponse.body = `${loggableResponse.body?.substring(0, 32)}...`
             }
 
             console.dir(loggableResponse)
@@ -313,17 +317,17 @@ export class AlbApp {
 
         let headers = apiResponse.headers
 
-        response.status(apiResponse.statusCode)
+        response.status(apiResponse.statusCode!)
 
-        Object.keys(headers).forEach(h => response.header(h, headers[h]))
+        Object.keys(headers as object).forEach(h => response.header(h, headers![h]))
 
         if (apiResponse.isBase64Encoded) {
             response.contentType(
-                apiResponse.headers["content-type"] || "application/octet-stream"
+                apiResponse.headers!["content-type"] as string || "application/octet-stream"
             )
 
             response.end(
-                Buffer.from(apiResponse.body, "base64")
+                Buffer.from(apiResponse.body!, "base64")
             )
         } else {
             response.send(apiResponse.body)
@@ -336,14 +340,14 @@ export class AlbApp {
                 if (listenOnAllHosts) {
                     this.log("Listening on all hosts")
 
-                    this.server = this.expressApp.listen(port, resolve)
+                    this.server = this.expressApp.listen(port, () => resolve(this.server!))
                 } else {
                     this.log("Listening on host: %s", host)
 
                     this.server = this.expressApp.listen(
                         port,
                         host,
-                        resolve
+                        () => resolve(this.server!)
                     )
                 }
             } catch (ex) {
@@ -361,7 +365,7 @@ export class AlbApp {
 
         await new Promise<void>((resolve, reject) => {
             try {
-                this.server.close(() => resolve())
+                this.server?.close(() => resolve())
             } catch (ex) {
                 reject(ex)
             }

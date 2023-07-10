@@ -27,8 +27,10 @@ async function main() {
 
     await app.runServer(args)
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     process.on("SIGINT", async () => await app.stopServer())
     console.log("Press CTRL-C at any time to exit...")
 }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => await main())()
